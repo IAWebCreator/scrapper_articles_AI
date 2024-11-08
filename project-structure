@@ -1,0 +1,39 @@
+ai-news-aggregator/
+├── backend/
+│   ├── run.py
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   ├── database.py
+│   │   └── scrapers/
+│   │       ├── __init__.py
+│   │       ├── base_scraper.py
+│   │       ├── arxiv_scraper.py
+│   │       ├── papers_with_code_scraper.py
+│   │       ├── jair_scraper.py
+│   │       ├── techcrunch_scraper.py
+│   │       ├── nature_scraper.py
+│   │       └── scraper_manager.py
+│   ├── requirements.txt
+│   └── alembic/
+│       └── versions/
+└── frontend/
+    ├── public/
+    │   ├── index.html
+    │   ├── favicon.ico
+    │   └── manifest.json
+    ├── src/
+    │   ├── components/
+    │   │   ├── ArticleCard.tsx
+    │   │   ├── ArticleList.tsx
+    │   │   └── FilterBar.tsx
+    │   ├── services/
+    │   │   └── api.ts
+    │   ├── App.tsx
+    │   ├── index.tsx
+    │   └── react-app-env.d.ts
+    ├── package.json
+    ├── tsconfig.json
+    └── tailwind.config.js 

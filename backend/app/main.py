@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime, timedelta
@@ -7,6 +9,8 @@ from . import models, schemas, database
 from .database import engine, SessionLocal
 from .scrapers.scraper_manager import ScraperManager
 import logging
+from .config import settings
+import os
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -17,20 +21,23 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="AI News Aggregator")
 
 # Update CORS settings
-origins = [
-    "http://localhost:3000",
-    "https://your-frontend-domain.vercel.app",  # Add your Vercel domain
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 scraper_manager = ScraperManager()
+
+# In production
+if os.getenv("ENVIRONMENT") == "production":
+    app.add_middleware(HTTPSRedirectMiddleware)
+    app.add_middleware(
+        TrustedHostMiddleware, 
+        allowed_hosts=["your-domain.com", "*.your-domain.com"]
+    )
 
 @app.get("/articles/", response_model=List[schemas.Article])
 async def get_articles(
